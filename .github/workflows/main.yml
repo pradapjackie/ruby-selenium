@@ -30,4 +30,4 @@ jobs:
     - name: Run Selenium tests
       run: |
         cd ruby
-        bundle exec ruby path/to/your_script.rb
+        bundle exec ruby test.rb
