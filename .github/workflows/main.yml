@@ -1,34 +1,32 @@
-name: Selenium Test
+name: Test
 
-on: [push, pull_request]
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
 
 jobs:
   test:
     runs-on: ubuntu-latest
 
-    services:
-      selenium:
-        image: selenium/standalone-chrome:latest
-        ports:
-          - 4444:4444
-
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
-    - name: Set up Ruby
-      uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: 3.0
+      - name: Set up Ruby
+        uses: actions/setup-ruby@v3
+        with:
+          ruby-version: '3.2'  # Replace with your desired Ruby version
 
-    - name: Install dependencies
-      run: |
-        gem install bundler
-        bundle install
+      - name: Install dependencies
+        run: |
+          gem install selenium-webdriver headless
 
-    - name: Run Selenium test
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y chromium-chromedriver
-        export PATH="$PATH:/usr/lib/chromium-browser/"
-        ruby test.rb # Replace with the path to your test script
+      # Install Chrome and ChromeDriver (replace with appropriate actions or scripts)
+
+      - name: Run tests
+        run: |
+          headless = Headless.new
+          headless.start
+          ruby test.rb
+          headless.destroy
