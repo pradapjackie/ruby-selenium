@@ -20,37 +20,40 @@ Before setting up GitHub Actions, ensure you have:
    - Add a YAML file (e.g., `selenium-tests.yml`) to this directory with the following content:
 
      ```yaml
-     name: Run Selenium Tests
+     name: Selenium Test
 
-     on:
-       push:
-         branches:
-           - main
-       pull_request:
-         branches:
-           - main
+on: [push, pull_request]
 
-     jobs:
-       selenium-tests:
-         runs-on: ubuntu-latest
+jobs:
+  test:
+    runs-on: ubuntu-latest
 
-         steps:
-         - name: Checkout code
-           uses: actions/checkout@v3
+    services:
+      selenium:
+        image: selenium/standalone-chrome:latest
+        ports:
+          - 4444:4444
 
-         - name: Set up Ruby
-           uses: ruby/setup-ruby@v1
-           with:
-             ruby-version: '3.1' # Specify the Ruby version required for your project
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
 
-         - name: Install dependencies
-           run: |
-             gem install bundler
-             bundle install
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: 3.0
 
-         - name: Run Selenium tests
-           run: |
-             bundle exec ruby path/to/your_script.rb
+    - name: Install dependencies
+      run: |
+        gem install bundler
+        bundle install
+
+    - name: Run Selenium test
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y chromium-chromedriver
+        export PATH="$PATH:/usr/lib/chromium-browser/"
+        ruby test.rb # Replace with the path to your test script
      ```
 
    Replace `path/to/your_script.rb` with the relative path to your Selenium test script.
