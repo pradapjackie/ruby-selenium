@@ -1,34 +1,33 @@
-name: Selenium Test
+name: Run Selenium Tests
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
-  test:
+  selenium-tests:
     runs-on: ubuntu-latest
 
-    services:
-      selenium:
-        image: selenium/standalone-chrome:latest
-        ports:
-          - 4444:4444
-
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
+    - name: Checkout code
+      uses: actions/checkout@v3
 
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1
       with:
-        ruby-version: 3.0
+        ruby-version: '3.1' # Specify the Ruby version required for your project
 
     - name: Install dependencies
       run: |
         gem install bundler
+        cd ruby
         bundle install
 
-    - name: Run Selenium test
+    - name: Run Selenium tests
       run: |
-        sudo apt-get update
-        sudo apt-get install -y chromium-chromedriver
-        export PATH="$PATH:/usr/lib/chromium-browser/"
-        ruby test.rb # Replace with the path to your test script
+        cd ruby
+        bundle exec ruby path/to/your_script.rb
