@@ -19,13 +19,15 @@ jobs:
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1
       with:
-        ruby-version: '3.1' # Specify the Ruby version you need
+        ruby-version: '3.1' # Specify the Ruby version required for your project
 
     - name: Install dependencies
       run: |
         gem install bundler
+        cd ruby
         bundle install
 
     - name: Run Selenium tests
       run: |
+        cd ruby
         bundle exec ruby path/to/your_script.rb
