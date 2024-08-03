@@ -26,7 +26,4 @@ jobs:
 
       - name: Run tests
         run: |
-          headless = Headless.new
-          headless.start
           ruby test.rb
-          headless.destroy
